@@ -16,19 +16,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_pessoa")
-public class Pessoa {
+@Table(name = "tb_gateway")
+public class Gateway {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "pessoa_id")
   private long id;
 
   @Column(nullable = false)
   private String nome;
 
-  @Column(nullable = false, unique = true)
-  private String email;
+  @Column(nullable = false)
+  private String descricao;
 
   @Column(nullable = false)
-  private String senha;
+  private String endereco;
+
+  private Pessoa pessoa;
 }

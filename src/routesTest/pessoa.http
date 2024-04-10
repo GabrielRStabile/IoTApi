@@ -1,0 +1,29 @@
+@BASE_URL=http://localhost:8080/pessoa
+
+### Obter uma pessoa
+GET {{BASE_URL}}/1
+
+### Obter todas as pessoas
+GET {{BASE_URL}}
+
+### Criar pessoa
+POST {{BASE_URL}}
+Content-Type: application/json
+
+{
+  "nome": "Jailson",
+  "email": "jailson@gmail.com",
+  "senha": "123"
+}
+
+### Atualizar pessoa
+PUT {{BASE_URL}}/2
+Content-Type: application/json
+
+{
+  "nome": "Jailson",
+  "email": "jpjailson@gmail.com"
+}
+
+### Deletar pessoa
+DELETE {{BASE_URL}}/1

@@ -1,0 +1,30 @@
+@BASE_URL=http://localhost:8080/gateway
+
+### Obter gateway
+GET {{BASE_URL}}/1
+
+### Obter todos os gateways
+GET {{BASE_URL}}
+
+### Criar gateway
+POST {{BASE_URL}}
+Content-Type: application/json
+
+{
+  "nome": "dadawd",
+  "descricao": "aaaaaa",
+  "endereco": "10.205.10.1",
+  "pessoa": 1
+}
+
+### Atualizar gateway
+PUT {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+  "nome": "Jailson",
+  "email": "jpjailson@gmail.com"
+}
+
+### Deletar gateway
+DELETE {{BASE_URL}}/1

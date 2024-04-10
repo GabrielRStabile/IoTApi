@@ -36,5 +36,5 @@ public class Pessoa {
   private String senha;
 
   @OneToMany(mappedBy = "pessoa")
-  private List<Gateway> gateway;
+  private List<Gateway> gateways;
 }

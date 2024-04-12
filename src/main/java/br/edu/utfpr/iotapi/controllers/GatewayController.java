@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import br.edu.utfpr.iotapi.dto.GatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.services.GatewayService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -42,7 +40,7 @@ public class GatewayController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> create(@RequestBody GatewayDTO dto) {
+  public ResponseEntity<Gateway> create(@RequestBody GatewayDTO dto) {
     try {
       var res = gatewayService.create(dto);
 
@@ -53,15 +51,28 @@ public class GatewayController {
     }
   }
 
+  @PostMapping("/{id}")
+  public ResponseEntity<Gateway> update(@PathVariable("id") long id, @RequestBody GatewayDTO dto) {
+    try {
+      var res = gatewayService.update(dto, id);
+
+      return ResponseEntity.ok().body(res);
+    } catch (NotFoundException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+    }
+  }
+
   @DeleteMapping("/{id}")
-  public ResponseEntity<Object> delete(@PathVariable("id") long id) {
+  public ResponseEntity<Gateway> delete(@PathVariable("id") long id) {
     try {
       gatewayService.delete(id);
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
     }
   }
 }

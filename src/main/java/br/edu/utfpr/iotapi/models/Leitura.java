@@ -1,5 +1,9 @@
 package br.edu.utfpr.iotapi.models;
 
+import java.util.Date;
+
+import org.checkerframework.checker.units.qual.C;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,18 +22,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_atuador")
-public class Atuador {
+@Table(name = "tb_leitura")
+public class Leitura {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "atuador_id")
+  @Column(name = "leitura_id")
   private long id;
 
   @Column(nullable = false)
-  private String nome;
+  private double valor;
 
-  @ManyToOne
   @Column(nullable = false)
-  @JoinColumn(name = "dispositivo_id")
-  private Dispositivo dispositivo;
+  private Date data;
+
+  @Column(nullable = false)
+  @ManyToOne
+  @JoinColumn(name = "sensor_id")
+  private Sensor sensor;
 }

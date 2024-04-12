@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.edu.utfpr.iotapi.dto.PessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
@@ -31,7 +32,7 @@ public class PessoaController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getById(@PathVariable("id") long id) {
+  public ResponseEntity<Pessoa> getById(@PathVariable("id") long id) {
     var person = pessoaService.getById(id);
 
     return person.isPresent()
@@ -40,37 +41,42 @@ public class PessoaController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> create(@RequestBody PessoaDTO dto) {
+  public ResponseEntity<Pessoa> create(@RequestBody PessoaDTO dto) {
     try {
       var res = pessoaService.create(dto);
 
       return ResponseEntity.status(HttpStatus.CREATED).body(res);
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, e.getMessage(), e);
     }
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Object> update(@PathVariable("id") long id, @RequestBody PessoaDTO dto) {
+  public ResponseEntity<Pessoa> update(@PathVariable("id") long id, @RequestBody PessoaDTO dto) {
     try {
       var res = pessoaService.update(dto, id);
       return ResponseEntity.ok().body(res);
     } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, e.getMessage(), e);
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, e.getMessage(), e);
     }
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Object> delete(@PathVariable("id") long id) {
+  public ResponseEntity<Pessoa> delete(@PathVariable("id") long id) {
     try {
       pessoaService.delete(id);
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, e.getMessage(), e);
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, e.getMessage(), e);
     }
   }
 }

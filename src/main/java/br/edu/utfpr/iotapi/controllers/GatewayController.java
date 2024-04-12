@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.edu.utfpr.iotapi.dto.GatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
@@ -32,7 +33,7 @@ public class GatewayController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getById(@PathVariable("id") long id) {
+  public ResponseEntity<Gateway> getById(@PathVariable("id") long id) {
     var gateway = gatewayService.getById(id);
 
     return gateway.isPresent()
@@ -47,7 +48,8 @@ public class GatewayController {
 
       return ResponseEntity.status(HttpStatus.CREATED).body(res);
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, e.getMessage(), e);
     }
   }
 

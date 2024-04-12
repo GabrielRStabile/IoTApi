@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.edu.utfpr.iotapi.dto.PessoaDTO;
+import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
+import br.edu.utfpr.iotapi.dto.DeletePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
+import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.services.PessoaService;
 
@@ -41,7 +43,7 @@ public class PessoaController {
   }
 
   @PostMapping
-  public ResponseEntity<Pessoa> create(@RequestBody PessoaDTO dto) {
+  public ResponseEntity<Pessoa> create(@RequestBody CreatePessoaDTO dto) {
     try {
       var res = pessoaService.create(dto);
 
@@ -53,7 +55,7 @@ public class PessoaController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Pessoa> update(@PathVariable("id") long id, @RequestBody PessoaDTO dto) {
+  public ResponseEntity<Pessoa> update(@PathVariable("id") long id, @RequestBody CreatePessoaDTO dto) {
     try {
       var res = pessoaService.update(dto, id);
       return ResponseEntity.ok().body(res);
@@ -67,13 +69,18 @@ public class PessoaController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Pessoa> delete(@PathVariable("id") long id) {
+  public ResponseEntity<Pessoa> delete(@PathVariable("id") long id, @RequestBody DeletePessoaDTO dto) {
     try {
+      pessoaService.checkPassword(id, dto.senha());
+
       pessoaService.delete(id);
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
       throw new ResponseStatusException(
           HttpStatus.NOT_FOUND, e.getMessage(), e);
+    } catch (WrongPasswordException e) {
+      throw new ResponseStatusException(
+          HttpStatus.UNAUTHORIZED, e.getMessage(), e);
     } catch (Exception e) {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST, e.getMessage(), e);

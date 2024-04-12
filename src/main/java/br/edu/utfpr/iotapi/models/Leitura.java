@@ -2,8 +2,6 @@ package br.edu.utfpr.iotapi.models;
 
 import java.util.Date;
 
-import org.checkerframework.checker.units.qual.C;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

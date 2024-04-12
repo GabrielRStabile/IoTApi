@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.edu.utfpr.iotapi.dto.GatewayDTO;
+import br.edu.utfpr.iotapi.dto.CreateGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.services.GatewayService;
@@ -40,7 +40,7 @@ public class GatewayController {
   }
 
   @PostMapping
-  public ResponseEntity<Gateway> create(@RequestBody GatewayDTO dto) {
+  public ResponseEntity<Gateway> create(@RequestBody CreateGatewayDTO dto) {
     try {
       var res = gatewayService.create(dto);
 
@@ -52,7 +52,7 @@ public class GatewayController {
   }
 
   @PostMapping("/{id}")
-  public ResponseEntity<Gateway> update(@PathVariable("id") long id, @RequestBody GatewayDTO dto) {
+  public ResponseEntity<Gateway> update(@PathVariable("id") long id, @RequestBody CreateGatewayDTO dto) {
     try {
       var res = gatewayService.update(dto, id);
 

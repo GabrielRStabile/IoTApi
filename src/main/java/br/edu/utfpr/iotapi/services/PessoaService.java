@@ -7,8 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.utfpr.iotapi.dto.PessoaDTO;
+import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
+import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.repository.PessoaRepository;
 
@@ -21,20 +22,33 @@ public class PessoaService {
     return pessoaRepository.findAll();
   }
 
+  public void checkPassword(long id, String password) throws NotFoundException, WrongPasswordException {
+    var res = pessoaRepository.findById(id);
+
+    if (res.isEmpty()) {
+      throw new NotFoundException("Pessoa " + id + " não existe");
+    }
+
+    var pessoa = res.get();
+
+    if (!pessoa.getSenha().equals(password)) {
+      throw new WrongPasswordException();
+    }
+
+  }
+
   public Optional<Pessoa> getById(long id) {
     return pessoaRepository.findById(id);
   }
 
-  // Inserir pessoa no db
-  public Pessoa create(PessoaDTO dto) {
+  public Pessoa create(CreatePessoaDTO dto) {
     var pessoa = new Pessoa();
     BeanUtils.copyProperties(dto, pessoa);
 
-    // Persistir no db
     return pessoaRepository.save(pessoa);
   }
 
-  public Pessoa update(PessoaDTO dto, long id) throws NotFoundException {
+  public Pessoa update(CreatePessoaDTO dto, long id) throws NotFoundException {
     var res = pessoaRepository.findById(id);
 
     if (res.isEmpty()) {

@@ -1,7 +1,5 @@
 package br.edu.utfpr.iotapi.models;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,30 +18,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_dispositivo")
-public class Dispositivo {
+@Table(name = "tb_sensor")
+public class Sensor {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "dispositivo_id")
+  @Column(name = "sensor_id")
   private long id;
 
   @Column(nullable = false)
   private String nome;
 
   @Column(nullable = false)
-  private String descricao;
-
-  private String local;
-
-  @Column(nullable = false)
-  private String endereco;
+  private String tipo;
 
   @ManyToOne
   @Column(nullable = false)
-  @JoinColumn(name = "gateway_id")
-  private Gateway gateway;
-
-  @Column(nullable = false)
-  @OneToMany(mappedBy = "dispositivo")
-  private List<Sensor> sensores;
+  @JoinColumn(name = "dispositivo_id")
+  private Dispositivo dispositivo;
 }

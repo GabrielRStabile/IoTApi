@@ -33,8 +33,7 @@ public class Leitura {
   @Column(nullable = false)
   private Date data;
 
-  @Column(nullable = false)
   @ManyToOne
-  @JoinColumn(name = "sensor_id")
+  @JoinColumn(name = "sensor_id", nullable = false)
   private Sensor sensor;
 }

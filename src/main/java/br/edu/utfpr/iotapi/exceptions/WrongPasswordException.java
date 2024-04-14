@@ -1,7 +1,9 @@
 package br.edu.utfpr.iotapi.exceptions;
 
-public class WrongPasswordException extends Exception {
+import org.springframework.http.HttpStatus;
+
+public class WrongPasswordException extends AppException {
   public WrongPasswordException() {
-    super("Senha incorreta!");
+    super("Senha incorreta", HttpStatus.BAD_REQUEST)                                                                                                                             ;
   }
 }

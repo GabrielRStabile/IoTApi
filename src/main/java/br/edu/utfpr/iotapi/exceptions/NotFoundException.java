@@ -1,7 +1,9 @@
 package br.edu.utfpr.iotapi.exceptions;
 
-public class NotFoundException extends Exception {
+import org.springframework.http.HttpStatus;
+
+public class NotFoundException extends AppException {
   public NotFoundException(String message) {
-    super(message);
+    super(message, HttpStatus.NOT_FOUND);
   }
 }

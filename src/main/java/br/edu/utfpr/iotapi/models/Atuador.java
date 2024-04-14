@@ -29,7 +29,6 @@ public class Atuador {
   private String nome;
 
   @ManyToOne
-  @Column(nullable = false)
-  @JoinColumn(name = "dispositivo_id")
+  @JoinColumn(name = "dispositivo_id", nullable = false)
   private Dispositivo dispositivo;
 }

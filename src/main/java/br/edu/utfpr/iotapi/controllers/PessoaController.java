@@ -6,6 +6,7 @@ import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.services.PessoaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,20 +33,20 @@ public class PessoaController {
     }
 
     @PostMapping
-    public ResponseEntity<Pessoa> create(@RequestBody CreatePessoaDTO dto) {
+    public ResponseEntity<Pessoa> create(@Valid @RequestBody CreatePessoaDTO dto) {
         var res = pessoaService.create(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pessoa> update(@PathVariable("id") long id, @RequestBody CreatePessoaDTO dto) throws NotFoundException {
+    public ResponseEntity<Pessoa> update(@PathVariable("id") long id, @Valid @RequestBody CreatePessoaDTO dto) throws NotFoundException {
         var res = pessoaService.update(dto, id);
         return ResponseEntity.ok().body(res);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pessoa> delete(@PathVariable("id") long id, @RequestBody DeletePessoaDTO dto) throws NotFoundException, WrongPasswordException {
+    public ResponseEntity<Pessoa> delete(@PathVariable("id") long id, @Valid @RequestBody DeletePessoaDTO dto) throws NotFoundException, WrongPasswordException {
         pessoaService.checkPassword(id, dto.senha());
 
         pessoaService.delete(id);

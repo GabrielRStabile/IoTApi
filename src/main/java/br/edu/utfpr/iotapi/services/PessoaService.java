@@ -1,74 +1,74 @@
 package br.edu.utfpr.iotapi.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.repository.PessoaRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
-  @Autowired
-  private PessoaRepository pessoaRepository;
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
-  public List<Pessoa> getAll() {
-    return pessoaRepository.findAll();
-  }
 
-  public void checkPassword(long id, String password) throws NotFoundException, WrongPasswordException {
-    var res = pessoaRepository.findById(id);
-
-    if (res.isEmpty()) {
-      throw new NotFoundException("Pessoa " + id + " não existe");
+    public List<Pessoa> getAll() {
+        return pessoaRepository.findAll();
     }
 
-    var pessoa = res.get();
+    public void checkPassword(long id, String password) throws NotFoundException, WrongPasswordException {
+        var res = pessoaRepository.findById(id);
 
-    if (!pessoa.getSenha().equals(password)) {
-      throw new WrongPasswordException();
+        if (res.isEmpty()) {
+            throw new NotFoundException("Pessoa " + id + " não existe");
+        }
+
+        var pessoa = res.get();
+
+        if (!pessoa.getSenha().equals(password)) {
+            throw new WrongPasswordException();
+        }
+
     }
 
-  }
-
-  public Optional<Pessoa> getById(long id) {
-    return pessoaRepository.findById(id);
-  }
-
-  public Pessoa create(CreatePessoaDTO dto) {
-    var pessoa = new Pessoa();
-    BeanUtils.copyProperties(dto, pessoa);
-
-    return pessoaRepository.save(pessoa);
-  }
-
-  public Pessoa update(CreatePessoaDTO dto, long id) throws NotFoundException {
-    var res = pessoaRepository.findById(id);
-
-    if (res.isEmpty()) {
-      throw new NotFoundException("Pessoa " + id + " não existe");
+    public Optional<Pessoa> getById(long id) {
+        return pessoaRepository.findById(id);
     }
 
-    var pessoa = res.get();
-    pessoa.setNome(dto.nome());
-    pessoa.setEmail(dto.email());
+    public Pessoa create(CreatePessoaDTO dto) {
+        var pessoa = new Pessoa();
+        BeanUtils.copyProperties(dto, pessoa);
 
-    return pessoaRepository.save(pessoa);
-  }
-
-  public void delete(long id) throws NotFoundException {
-    var res = pessoaRepository.findById(id);
-
-    if (res.isEmpty()) {
-      throw new NotFoundException("Pessoa " + id + " não existe");
+        return pessoaRepository.save(pessoa);
     }
 
-    pessoaRepository.deleteById(id);
-  }
+    public Pessoa update(CreatePessoaDTO dto, long id) throws NotFoundException {
+        var res = pessoaRepository.findById(id);
+
+        if (res.isEmpty()) {
+            throw new NotFoundException("Pessoa " + id + " não existe");
+        }
+
+        var pessoa = res.get();
+        pessoa.setNome(dto.nome());
+        pessoa.setEmail(dto.email());
+
+        return pessoaRepository.save(pessoa);
+    }
+
+    public void delete(long id) throws NotFoundException {
+        var res = pessoaRepository.findById(id);
+
+        if (res.isEmpty()) {
+            throw new NotFoundException("Pessoa " + id + " não existe");
+        }
+
+        pessoaRepository.deleteById(id);
+    }
 }

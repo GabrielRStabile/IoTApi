@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -45,9 +47,11 @@ public class Dispositivo {
 
   @Column(nullable = false)
   @OneToMany(mappedBy = "dispositivo")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Sensor> sensores;
 
   @Column(nullable = false)
   @OneToMany(mappedBy = "dispositivo")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Atuador> atuadores;
 }

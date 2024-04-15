@@ -2,8 +2,8 @@ package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
 import br.edu.utfpr.iotapi.dto.DeletePessoaDTO;
-import br.edu.utfpr.iotapi.dto.GetGatewayDTO;
 import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
+import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
 import br.edu.utfpr.iotapi.models.Gateway;

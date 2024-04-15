@@ -7,8 +7,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.utfpr.iotapi.dto.CreateGatewayDTO;
-import br.edu.utfpr.iotapi.dto.GetGatewayDTO;
+import br.edu.utfpr.iotapi.dto.gateway.CreateGatewayDTO;
+import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.repository.GatewayRepository;

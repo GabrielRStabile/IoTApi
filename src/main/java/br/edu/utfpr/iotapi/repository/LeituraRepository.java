@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.edu.utfpr.iotapi.models.Leitura;
 
-public interface LeituraRepository extends JpaRepository<Leitura, Long> {
+import java.util.List;
 
+public interface LeituraRepository extends JpaRepository<Leitura, Long> {
+    List<Leitura> findBySensorId(long sensorId);
 }

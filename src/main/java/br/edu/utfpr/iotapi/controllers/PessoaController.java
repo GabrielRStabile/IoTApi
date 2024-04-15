@@ -2,9 +2,11 @@ package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
 import br.edu.utfpr.iotapi.dto.DeletePessoaDTO;
+import br.edu.utfpr.iotapi.dto.GetGatewaysByPessoaIdDTO;
 import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
+import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.services.PessoaService;
 import jakarta.validation.Valid;
@@ -32,6 +34,11 @@ public class PessoaController {
 
         return person.map(pessoa -> ResponseEntity.ok().body(pessoa))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/gateway")
+    public List<GetGatewaysByPessoaIdDTO> getGatewaysByPessoaId(@PathVariable("id") long id) {
+        return pessoaService.getGatewaysByPessoaId(id);
     }
 
     @PostMapping

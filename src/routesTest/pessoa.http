@@ -6,6 +6,9 @@ GET {{BASE_URL}}/1
 ### Obter todas as pessoas
 GET {{BASE_URL}}
 
+###  get gateway by pessoa id
+GET {{BASE_URL}}/1/gateway
+
 ### Criar pessoa
 POST {{BASE_URL}}
 Content-Type: application/json

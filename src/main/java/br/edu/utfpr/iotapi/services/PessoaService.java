@@ -1,22 +1,31 @@
 package br.edu.utfpr.iotapi.services;
 
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
+import br.edu.utfpr.iotapi.dto.GetGatewaysByPessoaIdDTO;
 import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
+import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.models.Pessoa;
+import br.edu.utfpr.iotapi.repository.GatewayRepository;
 import br.edu.utfpr.iotapi.repository.PessoaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private GatewayRepository gatewayRepository;
 
     public List<Pessoa> getAll() {
         return pessoaRepository.findAll();
@@ -39,6 +48,19 @@ public class PessoaService {
 
     public Optional<Pessoa> getById(long id) {
         return pessoaRepository.findById(id);
+    }
+
+    public List<GetGatewaysByPessoaIdDTO> getGatewaysByPessoaId(long id) {
+        var res = pessoaRepository.findById(id);
+
+        if (res.isPresent()) {
+            List<Gateway> gateways = gatewayRepository.findByPessoaId(id);
+            return gateways.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     public Pessoa create(CreatePessoaDTO dto) {
@@ -77,5 +99,10 @@ public class PessoaService {
         }
 
         pessoaRepository.deleteById(id);
+    }
+
+    private GetGatewaysByPessoaIdDTO convertToDTO(Gateway gateway) {
+        return new GetGatewaysByPessoaIdDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(),
+                gateway.getEndereco());
     }
 }

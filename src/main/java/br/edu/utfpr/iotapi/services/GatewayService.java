@@ -21,9 +21,9 @@ public class GatewayService {
   @Autowired
   private PessoaRepository pessoaRepository;
 
-  public List<Gateway> getAll() {
-    return gatewayRepository.findAll();
-  }
+  // public List<Gateway> getAll() {
+  // return gatewayRepository.findAll();
+  // }
 
   public Optional<Gateway> getById(long id) {
     return gatewayRepository.findById(id);
@@ -33,8 +33,8 @@ public class GatewayService {
     var gateway = new Gateway();
     BeanUtils.copyProperties(dto, gateway);
 
-    var pessoa = pessoaRepository.findById(dto.pessoaId()).get();
-    gateway.setPessoa(pessoa);
+    var pessoa = pessoaRepository.findById(dto.pessoaId());
+    gateway.setPessoa(pessoa.get());
 
     return gatewayRepository.save(gateway);
   }
@@ -48,13 +48,12 @@ public class GatewayService {
     var gateway = res.get();
 
     var pessoa = pessoaRepository.findById(dto.pessoaId());
-    if (pessoa.isEmpty())
-      throw new NotFoundException("Pessoa " + dto.pessoaId() + " não existe");
-
+    if (!pessoa.isEmpty()) {
+      gateway.setPessoa(pessoa.get());
+    }
     gateway.setNome(dto.nome());
     gateway.setEndereco(dto.endereco());
     gateway.setDescricao(dto.descricao());
-    gateway.setPessoa(pessoa.get());
 
     return gatewayRepository.save(gateway);
   }

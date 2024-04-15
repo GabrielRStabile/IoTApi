@@ -14,7 +14,7 @@ Content-Type: application/json
   "nome": "dadawd",
   "descricao": "aaaaaa",
   "endereco": "10.205.10.1",
-  "pessoa": 1
+  "pessoaId": 1
 }
 
 ### Atualizar gateway
@@ -22,8 +22,7 @@ PUT {{BASE_URL}}/1
 Content-Type: application/json
 
 {
-  "nome": "Jailson",
-  "email": "jpjailson@gmail.com"
+
 }
 
 ### Deletar gateway

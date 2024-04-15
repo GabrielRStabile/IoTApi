@@ -22,7 +22,7 @@ Content-Type: application/json
 
 {
   "nome": "Jailson",
-  "email": "jailson@gmail.com"
+  "email": "jailsonmendes@gmail.com"
 }
 
 ### Atualizar pessoa e senha

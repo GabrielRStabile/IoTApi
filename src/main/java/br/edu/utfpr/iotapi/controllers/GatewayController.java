@@ -18,11 +18,10 @@ public class GatewayController {
     @Autowired
     private GatewayService gatewayService;
 
-
-    @GetMapping
-    public ResponseEntity<List<Gateway>> getAll() {
-        return ResponseEntity.ok().body(gatewayService.getAll());
-    }
+    // @GetMapping
+    // public ResponseEntity<List<Gateway>> getAll() {
+    // return ResponseEntity.ok().body(gatewayService.getAll());
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<Gateway> getById(@PathVariable("id") long id) {
@@ -39,7 +38,8 @@ public class GatewayController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<Gateway> update(@PathVariable("id") long id, @Valid @RequestBody CreateGatewayDTO dto) throws NotFoundException {
+    public ResponseEntity<Gateway> update(@PathVariable("id") long id, @Valid @RequestBody CreateGatewayDTO dto)
+            throws NotFoundException {
         var res = gatewayService.update(dto, id);
 
         return ResponseEntity.ok().body(res);

@@ -47,6 +47,8 @@ public class GatewayService {
 
     var gateway = res.get();
 
+    BeanUtils.copyProperties(dto, gateway);
+
     var pessoa = pessoaRepository.findById(dto.pessoaId());
     if (!pessoa.isEmpty()) {
       gateway.setPessoa(pessoa.get());
@@ -59,10 +61,9 @@ public class GatewayService {
   }
 
   public void delete(long id) throws NotFoundException {
-    var res = gatewayRepository.findById(id);
-
-    if (res.isEmpty())
+    if (!gatewayRepository.existsById(id)) {
       throw new NotFoundException("Gateway " + id + " não existe");
+    }
 
     gatewayRepository.deleteById(id);
   }

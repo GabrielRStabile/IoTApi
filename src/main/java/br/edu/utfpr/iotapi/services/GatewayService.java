@@ -42,28 +42,26 @@ public class GatewayService {
   public Gateway update(CreateGatewayDTO dto, long id) throws NotFoundException {
     var res = gatewayRepository.findById(id);
 
+
     if (res.isEmpty())
       throw new NotFoundException("Gateway " + id + " não existe");
 
     var gateway = res.get();
 
+    BeanUtils.copyProperties(dto, gateway);
+
     var pessoa = pessoaRepository.findById(dto.pessoaId());
     if (pessoa.isEmpty())
       throw new NotFoundException("Pessoa " + dto.pessoaId() + " não existe");
 
-    gateway.setNome(dto.nome());
-    gateway.setEndereco(dto.endereco());
-    gateway.setDescricao(dto.descricao());
-    gateway.setPessoa(pessoa.get());
 
     return gatewayRepository.save(gateway);
   }
 
   public void delete(long id) throws NotFoundException {
-    var res = gatewayRepository.findById(id);
-
-    if (res.isEmpty())
+    if (!gatewayRepository.existsById(id)) {
       throw new NotFoundException("Gateway " + id + " não existe");
+    }
 
     gatewayRepository.deleteById(id);
   }

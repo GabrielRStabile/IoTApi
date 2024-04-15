@@ -13,7 +13,7 @@ Content-Type: application/json
 {
   "nome": "Jailson",
   "email": "jailson@gmail.com",
-  "senha": "123"
+  "senha": "123456"
 }
 
 ### Atualizar pessoa
@@ -22,8 +22,25 @@ Content-Type: application/json
 
 {
   "nome": "Jailson",
-  "email": "jpjailson@gmail.com"
+  "email": "jailson@gmail.com"
+}
+
+### Atualizar pessoa e senha
+PUT {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+  "nome": "Jailson",
+  "email": "jailsonmendes@gmail.com",
+  "senhaAntiga": "123456",
+  "senhaNova": "654321"
 }
 
 ### Deletar pessoa
 DELETE {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+  "email": "jailsonmendes@gmail.com",
+  "senha": "654321"
+}

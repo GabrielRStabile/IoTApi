@@ -1,6 +1,7 @@
 package br.edu.utfpr.iotapi.services;
 
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
+import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
 import br.edu.utfpr.iotapi.models.Pessoa;
@@ -16,7 +17,6 @@ import java.util.Optional;
 public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
-
 
     public List<Pessoa> getAll() {
         return pessoaRepository.findAll();
@@ -48,14 +48,21 @@ public class PessoaService {
         return pessoaRepository.save(pessoa);
     }
 
-    public Pessoa update(CreatePessoaDTO dto, long id) throws NotFoundException {
+    public Pessoa update(long id, UpdatePessoaDTO dto) throws NotFoundException, WrongPasswordException {
         var res = pessoaRepository.findById(id);
 
         if (res.isEmpty()) {
             throw new NotFoundException("Pessoa " + id + " não existe");
         }
-
         var pessoa = res.get();
+
+        if (dto.senhaNova() != null && !dto.senhaAntiga().isEmpty()) {
+            if (!pessoa.getSenha().equals(dto.senhaAntiga())) {
+                throw new WrongPasswordException();
+            }
+            pessoa.setSenha(dto.senhaNova());
+        }
+
         pessoa.setNome(dto.nome());
         pessoa.setEmail(dto.email());
 

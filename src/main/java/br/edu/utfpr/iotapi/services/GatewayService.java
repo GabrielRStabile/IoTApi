@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.edu.utfpr.iotapi.dto.CreateGatewayDTO;
+import br.edu.utfpr.iotapi.dto.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.repository.GatewayRepository;
@@ -25,8 +26,13 @@ public class GatewayService {
   // return gatewayRepository.findAll();
   // }
 
-  public Optional<Gateway> getById(long id) {
-    return gatewayRepository.findById(id);
+  public Optional<GetGatewayDTO> getById(long id) throws NotFoundException {
+    var res = gatewayRepository.findById(id);
+    if (res.isPresent()) {
+      return Optional.of(convertToDTO(res.get()));
+    } else {
+      throw new NotFoundException("Gateway " + id + " não existe");
+    }
   }
 
   public Gateway create(CreateGatewayDTO dto) {
@@ -66,5 +72,10 @@ public class GatewayService {
     }
 
     gatewayRepository.deleteById(id);
+  }
+
+  private GetGatewayDTO convertToDTO(Gateway gateway) {
+    return new GetGatewayDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(),
+        gateway.getEndereco());
   }
 }

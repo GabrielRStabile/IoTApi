@@ -2,7 +2,7 @@ package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
 import br.edu.utfpr.iotapi.dto.DeletePessoaDTO;
-import br.edu.utfpr.iotapi.dto.GetGatewaysByPessoaIdDTO;
+import br.edu.utfpr.iotapi.dto.GetGatewayDTO;
 import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
@@ -37,7 +37,7 @@ public class PessoaController {
     }
 
     @GetMapping("/{id}/gateway")
-    public List<GetGatewaysByPessoaIdDTO> getGatewaysByPessoaId(@PathVariable("id") long id) {
+    public List<GetGatewayDTO> getGatewaysByPessoaId(@PathVariable("id") long id) {
         return pessoaService.getGatewaysByPessoaId(id);
     }
 

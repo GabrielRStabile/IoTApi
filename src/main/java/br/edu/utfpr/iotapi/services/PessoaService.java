@@ -1,7 +1,7 @@
 package br.edu.utfpr.iotapi.services;
 
 import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
-import br.edu.utfpr.iotapi.dto.GetGatewaysByPessoaIdDTO;
+import br.edu.utfpr.iotapi.dto.GetGatewayDTO;
 import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
@@ -50,7 +50,7 @@ public class PessoaService {
         return pessoaRepository.findById(id);
     }
 
-    public List<GetGatewaysByPessoaIdDTO> getGatewaysByPessoaId(long id) {
+    public List<GetGatewayDTO> getGatewaysByPessoaId(long id) {
         var res = pessoaRepository.findById(id);
 
         if (res.isPresent()) {
@@ -101,8 +101,8 @@ public class PessoaService {
         pessoaRepository.deleteById(id);
     }
 
-    private GetGatewaysByPessoaIdDTO convertToDTO(Gateway gateway) {
-        return new GetGatewaysByPessoaIdDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(),
+    private GetGatewayDTO convertToDTO(Gateway gateway) {
+        return new GetGatewayDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(),
                 gateway.getEndereco());
     }
 }

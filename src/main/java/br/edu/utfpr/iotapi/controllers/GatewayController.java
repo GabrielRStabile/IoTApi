@@ -1,6 +1,7 @@
 package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.CreateGatewayDTO;
+import br.edu.utfpr.iotapi.dto.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.services.GatewayService;
@@ -24,7 +25,7 @@ public class GatewayController {
     // }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Gateway> getById(@PathVariable("id") long id) {
+    public ResponseEntity<GetGatewayDTO> getById(@PathVariable("id") long id) throws NotFoundException {
         var gateway = gatewayService.getById(id);
 
         return gateway.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());

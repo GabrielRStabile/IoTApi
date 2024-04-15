@@ -6,6 +6,9 @@ GET {{BASE_URL}}/1
 ### Obter todas as pessoas
 GET {{BASE_URL}}
 
+###  get gateway by pessoa id
+GET {{BASE_URL}}/1/gateway
+
 ### Criar pessoa
 POST {{BASE_URL}}
 Content-Type: application/json
@@ -13,7 +16,7 @@ Content-Type: application/json
 {
   "nome": "Jailson",
   "email": "jailson@gmail.com",
-  "senha": "123"
+  "senha": "123456"
 }
 
 ### Atualizar pessoa
@@ -22,8 +25,25 @@ Content-Type: application/json
 
 {
   "nome": "Jailson",
-  "email": "jpjailson@gmail.com"
+  "email": "jailsonmendes@gmail.com"
+}
+
+### Atualizar pessoa e senha
+PUT {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+  "nome": "Jailson",
+  "email": "jailsonmendes@gmail.com",
+  "senhaAntiga": "123456",
+  "senhaNova": "654321"
 }
 
 ### Deletar pessoa
 DELETE {{BASE_URL}}/1
+Content-Type: application/json
+
+{
+  "email": "jailsonmendes@gmail.com",
+  "senha": "654321"
+}

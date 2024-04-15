@@ -1,6 +1,7 @@
 package br.edu.utfpr.iotapi.controllers;
 
-import br.edu.utfpr.iotapi.dto.CreateGatewayDTO;
+import br.edu.utfpr.iotapi.dto.gateway.CreateGatewayDTO;
+import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.services.GatewayService;
@@ -18,14 +19,13 @@ public class GatewayController {
     @Autowired
     private GatewayService gatewayService;
 
-
-    @GetMapping
-    public ResponseEntity<List<Gateway>> getAll() {
-        return ResponseEntity.ok().body(gatewayService.getAll());
-    }
+    // @GetMapping
+    // public ResponseEntity<List<Gateway>> getAll() {
+    // return ResponseEntity.ok().body(gatewayService.getAll());
+    // }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Gateway> getById(@PathVariable("id") long id) {
+    public ResponseEntity<GetGatewayDTO> getById(@PathVariable("id") long id) throws NotFoundException {
         var gateway = gatewayService.getById(id);
 
         return gateway.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
@@ -39,7 +39,8 @@ public class GatewayController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<Gateway> update(@PathVariable("id") long id, @Valid @RequestBody CreateGatewayDTO dto) throws NotFoundException {
+    public ResponseEntity<Gateway> update(@PathVariable("id") long id, @Valid @RequestBody CreateGatewayDTO dto)
+            throws NotFoundException {
         var res = gatewayService.update(dto, id);
 
         return ResponseEntity.ok().body(res);

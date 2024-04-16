@@ -35,7 +35,7 @@ public class Gateway {
   @Column(nullable = false)
   private String descricao;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String endereco;
 
   @ManyToOne

@@ -80,7 +80,9 @@ public class GatewayService {
     List<Dispositivo> dispositivos = dispositivoRepository.findAllById(dispositivosIds);
 
     for (Dispositivo dispositivo : dispositivos) {
-      dispositivo.setGateway(gateway.get());
+      if (dispositivo.getGateway() == null) {
+        dispositivo.setGateway(gateway.get());
+      }
     }
 
     dispositivoRepository.saveAll(dispositivos);

@@ -2,6 +2,7 @@ package br.edu.utfpr.iotapi.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import br.edu.utfpr.iotapi.dto.gateway.CreateGatewayDTO;
 import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
+import br.edu.utfpr.iotapi.models.Dispositivo;
 import br.edu.utfpr.iotapi.models.Gateway;
+import br.edu.utfpr.iotapi.repository.DispositivoRepository;
 import br.edu.utfpr.iotapi.repository.GatewayRepository;
 import br.edu.utfpr.iotapi.repository.PessoaRepository;
 
@@ -22,6 +25,8 @@ public class GatewayService {
   @Autowired
   private PessoaRepository pessoaRepository;
 
+  @Autowired
+  private DispositivoRepository dispositivoRepository;
   // public List<Gateway> getAll() {
   // return gatewayRepository.findAll();
   // }
@@ -64,6 +69,21 @@ public class GatewayService {
     gateway.setDescricao(dto.descricao());
 
     return gatewayRepository.save(gateway);
+  }
+
+  public void addDispositivos(long gatewayId, List<Long> dispositivosIds) throws NotFoundException {
+    var gateway = gatewayRepository.findById(gatewayId);
+
+    if (gateway.isEmpty())
+      throw new NotFoundException("Gateway " + gatewayId + " não existe");
+
+    List<Dispositivo> dispositivos = dispositivoRepository.findAllById(dispositivosIds);
+
+    for (Dispositivo dispositivo : dispositivos) {
+      dispositivo.setGateway(gateway.get());
+    }
+
+    dispositivoRepository.saveAll(dispositivos);
   }
 
   public void delete(long id) throws NotFoundException {

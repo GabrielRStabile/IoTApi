@@ -42,7 +42,7 @@ public class Dispositivo {
   private String endereco;
 
   @ManyToOne
-  @JoinColumn(name = "gateway_id", nullable = false)
+  @JoinColumn(name = "gateway_id")
   private Gateway gateway;
 
   @Column(nullable = false)

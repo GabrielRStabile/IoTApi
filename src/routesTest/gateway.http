@@ -25,5 +25,13 @@ Content-Type: application/json
 
 }
 
+### Inserir dispositivo
+PUT {{BASE_URL}}/1/dispositivo
+Content-Type: application/json
+
+{
+  "dispositivosIds": [1, 2]
+}
+
 ### Deletar gateway
 DELETE {{BASE_URL}}/1

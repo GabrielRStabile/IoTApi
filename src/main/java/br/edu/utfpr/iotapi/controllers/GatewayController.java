@@ -46,6 +46,13 @@ public class GatewayController {
         return ResponseEntity.ok().body(res);
     }
 
+    @PutMapping("/{id}/dispositivo")
+    public ResponseEntity<Void> addDispositivos(@PathVariable("id") long id, @RequestBody List<Long> dispositivosIds)
+            throws NotFoundException {
+        gatewayService.addDispositivos(id, dispositivosIds);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Gateway> delete(@PathVariable("id") long id) throws NotFoundException {
         gatewayService.delete(id);

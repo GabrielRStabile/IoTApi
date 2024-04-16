@@ -103,7 +103,6 @@ public class PessoaService {
     }
 
     private GetGatewayDTO convertToDTO(Gateway gateway) {
-        return new GetGatewayDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(),
-                gateway.getEndereco());
+        return new GetGatewayDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(), gateway.getEndereco());
     }
 }

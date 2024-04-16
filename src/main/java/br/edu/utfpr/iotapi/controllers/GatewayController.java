@@ -1,5 +1,6 @@
 package br.edu.utfpr.iotapi.controllers;
 
+import br.edu.utfpr.iotapi.dto.GetDispositivoByGatewayIdDTO;
 import br.edu.utfpr.iotapi.dto.gateway.CreateGatewayDTO;
 import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
@@ -43,6 +44,20 @@ public class GatewayController {
             throws NotFoundException {
         var res = gatewayService.update(dto, id);
 
+        return ResponseEntity.ok().body(res);
+    }
+
+    @PutMapping("/{id}/dispositivo")
+    public ResponseEntity<Void> addDispositivos(@PathVariable("id") long id, @RequestBody List<Long> dispositivosIds)
+            throws NotFoundException {
+        gatewayService.addDispositivos(id, dispositivosIds);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/dispositivo")
+    public ResponseEntity<List<GetDispositivoByGatewayIdDTO>> getDispositivosByGatewayIdDTO(@PathVariable("id") long id)
+            throws NotFoundException {
+        var res = gatewayService.getDispositivosByGatewayIdDTO(id);
         return ResponseEntity.ok().body(res);
     }
 

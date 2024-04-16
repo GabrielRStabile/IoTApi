@@ -1,6 +1,8 @@
 package br.edu.utfpr.iotapi.models;
 
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +35,7 @@ public class Gateway {
   @Column(nullable = false)
   private String descricao;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String endereco;
 
   @ManyToOne
@@ -41,6 +43,6 @@ public class Gateway {
   private Pessoa pessoa;
 
   @Column(nullable = false)
-  @OneToMany(mappedBy = "gateway")
+  @OneToMany(mappedBy = "gateway", cascade = CascadeType.ALL)
   private List<Dispositivo> dispositivos;
 }

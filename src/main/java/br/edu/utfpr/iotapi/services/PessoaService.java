@@ -5,6 +5,7 @@ import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
+import br.edu.utfpr.iotapi.models.Dispositivo;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.repository.GatewayRepository;
@@ -102,7 +103,6 @@ public class PessoaService {
     }
 
     private GetGatewayDTO convertToDTO(Gateway gateway) {
-        return new GetGatewayDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(),
-                gateway.getEndereco());
+        return new GetGatewayDTO(gateway.getId(), gateway.getNome(), gateway.getDescricao(), gateway.getEndereco());
     }
 }

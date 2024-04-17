@@ -63,7 +63,7 @@ public class GatewayController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Gateway> delete(@PathVariable("id") long id) throws NotFoundException {
-        gatewayService.delete(id);
+        gatewayService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 }

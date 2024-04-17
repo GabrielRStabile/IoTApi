@@ -61,6 +61,13 @@ public class GatewayController {
         return ResponseEntity.ok().body(res);
     }
 
+    @DeleteMapping("/{id}/dispositivo")
+    public ResponseEntity<Void> disassociateDispositivosByGatewayId(@PathVariable("id") long id,
+            @RequestBody List<Long> dispositivosIds) throws NotFoundException {
+        gatewayService.disassociateDispositivosByGatewayId(id, dispositivosIds);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Gateway> delete(@PathVariable("id") long id) throws NotFoundException {
         gatewayService.deleteById(id);

@@ -105,6 +105,23 @@ public class GatewayService {
         .collect(Collectors.toList());
   }
 
+  public void disassociateDispositivosByGatewayId(long gatewayId, List<Long> dispositivosId) throws NotFoundException {
+    var res = gatewayRepository.findById(gatewayId);
+
+    if (res.isEmpty()) {
+      throw new NotFoundException("Gateway " + gatewayId + " não existe");
+    }
+
+    List<Dispositivo> dispositivos = dispositivoRepository.findAllById(dispositivosId);
+
+    for (Dispositivo dispositivo : dispositivos) {
+      if (dispositivo.getGateway() != null && dispositivo.getGateway().getId() == gatewayId) {
+        dispositivo.setGateway(null);
+      }
+    }
+    dispositivoRepository.saveAll(dispositivos);
+  }
+
   @Transactional
   public void deleteById(long id) throws NotFoundException {
     if (!gatewayRepository.existsById(id)) {

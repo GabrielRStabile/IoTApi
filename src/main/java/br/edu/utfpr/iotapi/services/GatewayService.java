@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.utfpr.iotapi.dto.GetDispositivoByGatewayIdDTO;
 import br.edu.utfpr.iotapi.dto.gateway.CreateGatewayDTO;
@@ -104,11 +105,34 @@ public class GatewayService {
         .collect(Collectors.toList());
   }
 
-  public void delete(long id) throws NotFoundException {
+  public void disassociateDispositivosByGatewayId(long gatewayId, List<Long> dispositivosId) throws NotFoundException {
+    var res = gatewayRepository.findById(gatewayId);
+
+    if (res.isEmpty()) {
+      throw new NotFoundException("Gateway " + gatewayId + " não existe");
+    }
+
+    List<Dispositivo> dispositivos = dispositivoRepository.findAllById(dispositivosId);
+
+    for (Dispositivo dispositivo : dispositivos) {
+      if (dispositivo.getGateway() != null && dispositivo.getGateway().getId() == gatewayId) {
+        dispositivo.setGateway(null);
+      }
+    }
+    dispositivoRepository.saveAll(dispositivos);
+  }
+
+  @Transactional
+  public void deleteById(long id) throws NotFoundException {
     if (!gatewayRepository.existsById(id)) {
       throw new NotFoundException("Gateway " + id + " não existe");
     }
 
+    List<Dispositivo> dispositivos = dispositivoRepository.findByGatewayId(id);
+
+    for (Dispositivo dispositivo : dispositivos) {
+      dispositivo.setGateway(null);
+    }
     gatewayRepository.deleteById(id);
   }
 

@@ -16,3 +16,5 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 
 spring.jpa.open-in-view=false
 springdoc.default-produces-media-type=application/json
+jwt.secret=
+jwt.expiration-time-minutes=1440

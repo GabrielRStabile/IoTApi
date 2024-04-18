@@ -1,23 +1,23 @@
 package br.edu.utfpr.iotapi.services;
 
-import br.edu.utfpr.iotapi.dto.CreatePessoaDTO;
+import br.edu.utfpr.iotapi.dto.GetPessoaDTO;
 import br.edu.utfpr.iotapi.dto.UpdatePessoaDTO;
 import br.edu.utfpr.iotapi.dto.gateway.GetGatewayDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
-import br.edu.utfpr.iotapi.exceptions.WrongPasswordException;
-import br.edu.utfpr.iotapi.models.Dispositivo;
 import br.edu.utfpr.iotapi.models.Gateway;
 import br.edu.utfpr.iotapi.models.Pessoa;
 import br.edu.utfpr.iotapi.repository.GatewayRepository;
 import br.edu.utfpr.iotapi.repository.PessoaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,11 +28,10 @@ public class PessoaService {
     @Autowired
     private GatewayRepository gatewayRepository;
 
-    public List<Pessoa> getAll() {
-        return pessoaRepository.findAll();
-    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public void checkPassword(long id, String password) throws NotFoundException, WrongPasswordException {
+    public void checkPassword(long id, String password) throws NotFoundException, AuthenticationException {
         var res = pessoaRepository.findById(id);
 
         if (res.isEmpty()) {
@@ -41,14 +40,17 @@ public class PessoaService {
 
         var pessoa = res.get();
 
-        if (!pessoa.getSenha().equals(password)) {
-            throw new WrongPasswordException();
-        }
-
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(pessoa.getEmail(), password));
     }
 
-    public Optional<Pessoa> getById(long id) {
-        return pessoaRepository.findById(id);
+    public GetPessoaDTO getByEmail(String email) {
+        var pessoa = pessoaRepository.findByEmail(email);
+
+        var res = new GetPessoaDTO();
+
+        BeanUtils.copyProperties(pessoa, res);
+
+        return res;
     }
 
     public List<GetGatewayDTO> getGatewaysByPessoaId(long id) {
@@ -64,14 +66,7 @@ public class PessoaService {
         }
     }
 
-    public Pessoa create(CreatePessoaDTO dto) {
-        var pessoa = new Pessoa();
-        BeanUtils.copyProperties(dto, pessoa);
-
-        return pessoaRepository.save(pessoa);
-    }
-
-    public Pessoa update(long id, UpdatePessoaDTO dto) throws NotFoundException, WrongPasswordException {
+    public Pessoa update(long id, UpdatePessoaDTO dto) throws NotFoundException {
         var res = pessoaRepository.findById(id);
 
         if (res.isEmpty()) {
@@ -80,9 +75,7 @@ public class PessoaService {
         var pessoa = res.get();
 
         if (dto.senhaNova() != null && !dto.senhaAntiga().isEmpty()) {
-            if (!pessoa.getSenha().equals(dto.senhaAntiga())) {
-                throw new WrongPasswordException();
-            }
+            checkPassword(id, dto.senhaAntiga());
             pessoa.setSenha(dto.senhaNova());
         }
 

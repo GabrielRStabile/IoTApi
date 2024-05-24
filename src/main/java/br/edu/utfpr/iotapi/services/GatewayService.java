@@ -66,9 +66,9 @@ public class GatewayService {
     if (!pessoa.isEmpty()) {
       gateway.setPessoa(pessoa.get());
     }
-    gateway.setNome(dto.nome());
-    gateway.setEndereco(dto.endereco());
-    gateway.setDescricao(dto.descricao());
+    // gateway.setNome(dto.nome());
+    // gateway.setEndereco(dto.endereco());
+    // gateway.setDescricao(dto.descricao());
 
     return gatewayRepository.save(gateway);
   }

@@ -39,7 +39,7 @@ public class GatewayController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Gateway> update(@PathVariable("id") long id, @Valid @RequestBody CreateGatewayDTO dto)
             throws NotFoundException {
         var res = gatewayService.update(dto, id);

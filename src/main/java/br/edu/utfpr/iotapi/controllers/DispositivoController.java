@@ -1,6 +1,7 @@
 package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.dispositivo.CreateDispositivoDTO;
+import br.edu.utfpr.iotapi.dto.dispositivo.GetDispositivoDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Atuador;
 import br.edu.utfpr.iotapi.models.Dispositivo;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/dispositivo")
@@ -26,7 +29,8 @@ public class DispositivoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Dispositivo> update(@PathVariable("id") long id, @RequestBody CreateDispositivoDTO dto) throws NotFoundException {
+    public ResponseEntity<Dispositivo> update(@PathVariable("id") long id, @RequestBody CreateDispositivoDTO dto)
+            throws NotFoundException {
         Dispositivo dispositivo = dispositivoService.update(dto, id);
         return ResponseEntity.ok(dispositivo);
     }
@@ -38,32 +42,43 @@ public class DispositivoController {
     }
 
     @PostMapping("/{id}/sensor")
-    public ResponseEntity<Void> addSensors(@PathVariable("id") long id, @RequestBody List<Long> sensorIds) throws NotFoundException {
+    public ResponseEntity<Void> addSensors(@PathVariable("id") long id, @RequestBody List<Long> sensorIds)
+            throws NotFoundException {
         dispositivoService.addSensors(id, sensorIds);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/sensor")
-    public ResponseEntity<Void> removeSensors(@PathVariable("id") long id, @RequestBody List<Long> sensorIds) throws NotFoundException {
+    public ResponseEntity<Void> removeSensors(@PathVariable("id") long id, @RequestBody List<Long> sensorIds)
+            throws NotFoundException {
         dispositivoService.removeSensors(id, sensorIds);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{id}/atuador")
-    public ResponseEntity<Void> addAtuadores(@PathVariable("id") long id, @RequestBody List<Long> atuadorIds) throws NotFoundException {
+    public ResponseEntity<Void> addAtuadores(@PathVariable("id") long id, @RequestBody List<Long> atuadorIds)
+            throws NotFoundException {
         dispositivoService.addAtuadores(id, atuadorIds);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/atuador")
-    public ResponseEntity<Void> removeAtuadores(@PathVariable("id") long id, @RequestBody List<Long> atuadorIds) throws NotFoundException {
+    public ResponseEntity<Void> removeAtuadores(@PathVariable("id") long id, @RequestBody List<Long> atuadorIds)
+            throws NotFoundException {
         dispositivoService.removeAtuadores(id, atuadorIds);
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping
+    public ResponseEntity<List<GetDispositivoDTO>> getAll() {
+        List<GetDispositivoDTO> dispositivos = dispositivoService.getAll();
+        return ResponseEntity.ok(dispositivos);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Dispositivo> getById(@PathVariable("id") long id) {
-        Dispositivo dispositivo = dispositivoService.getById(id);
+    public ResponseEntity<GetDispositivoDTO> getById(@PathVariable("id") long id) {
+        // Dispositivo dispositivo = dispositivoService.getById(id);
+        GetDispositivoDTO dispositivo = dispositivoService.getById(id);
         if (dispositivo == null) {
             return ResponseEntity.notFound().build();
         }

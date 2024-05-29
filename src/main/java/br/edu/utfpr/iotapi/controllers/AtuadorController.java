@@ -17,7 +17,6 @@ import br.edu.utfpr.iotapi.dto.atuador.CreateAtuadorDTO;
 import br.edu.utfpr.iotapi.dto.atuador.GetAtuadorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Atuador;
-import br.edu.utfpr.iotapi.models.Sensor;
 import br.edu.utfpr.iotapi.services.AtuadorService;
 
 import jakarta.validation.Valid;

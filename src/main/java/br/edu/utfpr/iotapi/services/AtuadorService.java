@@ -1,5 +1,6 @@
 package br.edu.utfpr.iotapi.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,10 @@ public class AtuadorService {
     } else {
       throw new NotFoundException("Atuador " + id + " não existe");
     }
+  }
+
+  public List<Atuador> getAll() {
+    return atuadorRepository.findAll();
   }
 
   public Atuador create(CreateAtuadorDTO dto) {

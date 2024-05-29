@@ -29,9 +29,10 @@ public class GatewayService {
 
   @Autowired
   private DispositivoRepository dispositivoRepository;
-  // public List<Gateway> getAll() {
-  // return gatewayRepository.findAll();
-  // }
+
+  public List<Gateway> getAll() {
+    return gatewayRepository.findAll();
+  }
 
   public Optional<GetGatewayDTO> getById(long id) throws NotFoundException {
     var res = gatewayRepository.findById(id);

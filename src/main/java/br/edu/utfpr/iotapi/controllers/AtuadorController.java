@@ -1,5 +1,7 @@
 package br.edu.utfpr.iotapi.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +17,7 @@ import br.edu.utfpr.iotapi.dto.atuador.CreateAtuadorDTO;
 import br.edu.utfpr.iotapi.dto.atuador.GetAtuadorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Atuador;
+import br.edu.utfpr.iotapi.models.Sensor;
 import br.edu.utfpr.iotapi.services.AtuadorService;
 
 import jakarta.validation.Valid;
@@ -30,6 +33,12 @@ public class AtuadorController {
     var atuador = atuadorService.getById(id);
 
     return atuador.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping
+  public ResponseEntity<List<Atuador>> getAll() {
+    List<Atuador> atuadores = atuadorService.getAll();
+    return ResponseEntity.ok(atuadores);
   }
 
   @PostMapping

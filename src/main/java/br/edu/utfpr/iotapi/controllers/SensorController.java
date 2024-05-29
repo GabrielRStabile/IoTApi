@@ -31,6 +31,12 @@ public class SensorController {
         return ResponseEntity.ok(sensor);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Sensor>> getAll() {
+        List<Sensor> sensores = sensorService.getAll();
+        return ResponseEntity.ok(sensores);
+    }
+
     @GetMapping("/{id}/leitura")
     public ResponseEntity<List<Leitura>> getLeiturasBySensorId(@PathVariable("id") long id) {
         List<Leitura> leituras = leituraService.getBySensorId(id);
@@ -44,7 +50,8 @@ public class SensorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sensor> update(@PathVariable("id") long id, @RequestBody CreateSensorDTO dto) throws NotFoundException {
+    public ResponseEntity<Sensor> update(@PathVariable("id") long id, @RequestBody CreateSensorDTO dto)
+            throws NotFoundException {
         Sensor sensor = sensorService.update(dto, id);
         return ResponseEntity.ok(sensor);
     }

@@ -21,7 +21,7 @@ public class GatewayController {
     private GatewayService gatewayService;
 
     @GetMapping
-    public ResponseEntity<List<Gateway>> getAll() {
+    public ResponseEntity<List<GetGatewayDTO>> getAll() {
         return ResponseEntity.ok().body(gatewayService.getAll());
     }
 

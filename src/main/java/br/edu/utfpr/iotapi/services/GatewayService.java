@@ -30,8 +30,9 @@ public class GatewayService {
   @Autowired
   private DispositivoRepository dispositivoRepository;
 
-  public List<Gateway> getAll() {
-    return gatewayRepository.findAll();
+  public List<GetGatewayDTO> getAll() {
+    List<Gateway> gateways = gatewayRepository.findAll();
+    return gateways.stream().map(this::convertToDTO).collect(Collectors.toList());
   }
 
   public Optional<GetGatewayDTO> getById(long id) throws NotFoundException {

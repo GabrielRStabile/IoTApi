@@ -1,6 +1,7 @@
 package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.sensor.CreateSensorDTO;
+import br.edu.utfpr.iotapi.dto.sensor.GetSensorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Leitura;
 import br.edu.utfpr.iotapi.models.Sensor;
@@ -32,8 +33,8 @@ public class SensorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Sensor>> getAll() {
-        List<Sensor> sensores = sensorService.getAll();
+    public ResponseEntity<List<GetSensorDTO>> getAll() {
+        List<GetSensorDTO> sensores = sensorService.getAll();
         return ResponseEntity.ok(sensores);
     }
 

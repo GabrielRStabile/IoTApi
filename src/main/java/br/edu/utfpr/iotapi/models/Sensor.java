@@ -37,7 +37,7 @@ public class Sensor {
   private String tipo;
 
   @ManyToOne
-  @JoinColumn(name = "dispositivo_id", nullable = false)
+  @JoinColumn(name = "dispositivo_id")
   private Dispositivo dispositivo;
 
   @Column(nullable = false)

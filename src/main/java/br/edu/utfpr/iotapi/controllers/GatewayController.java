@@ -20,10 +20,10 @@ public class GatewayController {
     @Autowired
     private GatewayService gatewayService;
 
-    // @GetMapping
-    // public ResponseEntity<List<Gateway>> getAll() {
-    // return ResponseEntity.ok().body(gatewayService.getAll());
-    // }
+    @GetMapping
+    public ResponseEntity<List<GetGatewayDTO>> getAll() {
+        return ResponseEntity.ok().body(gatewayService.getAll());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<GetGatewayDTO> getById(@PathVariable("id") long id) throws NotFoundException {

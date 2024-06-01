@@ -1,7 +1,9 @@
 package br.edu.utfpr.iotapi.services;
 
 import br.edu.utfpr.iotapi.dto.sensor.CreateSensorDTO;
+import br.edu.utfpr.iotapi.dto.sensor.GetSensorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
+import br.edu.utfpr.iotapi.models.Dispositivo;
 import br.edu.utfpr.iotapi.models.Sensor;
 import br.edu.utfpr.iotapi.repository.SensorRepository;
 import org.springframework.beans.BeanUtils;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SensorService {
@@ -19,8 +22,9 @@ public class SensorService {
         return sensorRepository.findById(id).orElse(null);
     }
 
-    public List<Sensor> getAll() {
-        return sensorRepository.findAll();
+    public List<GetSensorDTO> getAll() {
+        List<Sensor> sensores = sensorRepository.findAll();
+        return sensores.stream().map(this::convertToGetSensorDTO).collect(Collectors.toList());
     }
 
     public Sensor create(CreateSensorDTO dto) {
@@ -30,7 +34,8 @@ public class SensorService {
     }
 
     public Sensor update(CreateSensorDTO dto, long id) throws NotFoundException {
-        Sensor sensor = sensorRepository.findById(id).orElseThrow(() -> new NotFoundException("Sensor " + id + " não existe"));
+        Sensor sensor = sensorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Sensor " + id + " não existe"));
         BeanUtils.copyProperties(dto, sensor, "id");
         return sensorRepository.save(sensor);
     }
@@ -41,5 +46,13 @@ public class SensorService {
             throw new NotFoundException("Sensor " + id + " não existe");
         }
         sensorRepository.deleteById(id);
+    }
+
+    private GetSensorDTO convertToGetSensorDTO(Sensor sensor) {
+        Long dispositivoId = (sensor.getDispositivo() != null) ? sensor.getDispositivo().getId() : null;
+
+        GetSensorDTO dto = new GetSensorDTO(
+                sensor.getId(), sensor.getNome(), sensor.getTipo(), dispositivoId);
+        return dto;
     }
 }

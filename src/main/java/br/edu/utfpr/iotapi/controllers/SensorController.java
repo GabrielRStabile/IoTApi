@@ -1,6 +1,7 @@
 package br.edu.utfpr.iotapi.controllers;
 
 import br.edu.utfpr.iotapi.dto.sensor.CreateSensorDTO;
+import br.edu.utfpr.iotapi.dto.sensor.GetSensorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Leitura;
 import br.edu.utfpr.iotapi.models.Sensor;
@@ -31,6 +32,12 @@ public class SensorController {
         return ResponseEntity.ok(sensor);
     }
 
+    @GetMapping
+    public ResponseEntity<List<GetSensorDTO>> getAll() {
+        List<GetSensorDTO> sensores = sensorService.getAll();
+        return ResponseEntity.ok(sensores);
+    }
+
     @GetMapping("/{id}/leitura")
     public ResponseEntity<List<Leitura>> getLeiturasBySensorId(@PathVariable("id") long id) {
         List<Leitura> leituras = leituraService.getBySensorId(id);
@@ -44,7 +51,8 @@ public class SensorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sensor> update(@PathVariable("id") long id, @RequestBody CreateSensorDTO dto) throws NotFoundException {
+    public ResponseEntity<Sensor> update(@PathVariable("id") long id, @RequestBody CreateSensorDTO dto)
+            throws NotFoundException {
         Sensor sensor = sensorService.update(dto, id);
         return ResponseEntity.ok(sensor);
     }

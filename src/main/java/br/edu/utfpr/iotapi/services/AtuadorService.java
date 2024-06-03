@@ -2,6 +2,7 @@ package br.edu.utfpr.iotapi.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import br.edu.utfpr.iotapi.dto.atuador.CreateAtuadorDTO;
 import br.edu.utfpr.iotapi.dto.atuador.GetAtuadorDTO;
+import br.edu.utfpr.iotapi.dto.sensor.GetSensorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Atuador;
+import br.edu.utfpr.iotapi.models.Sensor;
 import br.edu.utfpr.iotapi.repository.AtuadorRepository;
 import br.edu.utfpr.iotapi.repository.DispositivoRepository;
 
@@ -27,15 +30,16 @@ public class AtuadorService {
     if (res.isPresent()) {
       var atuador = res.get();
 
-      GetAtuadorDTO dto = new GetAtuadorDTO(atuador.getId(), atuador.getNome());
+      GetAtuadorDTO dto = convertToGetAtuadorDTO(atuador);
       return Optional.of(dto);
     } else {
       throw new NotFoundException("Atuador " + id + " não existe");
     }
   }
 
-  public List<Atuador> getAll() {
-    return atuadorRepository.findAll();
+  public List<GetAtuadorDTO> getAll() {
+    List<Atuador> atuadores = atuadorRepository.findAll();
+    return atuadores.stream().map(this::convertToGetAtuadorDTO).collect(Collectors.toList());
   }
 
   public Atuador create(CreateAtuadorDTO dto) {
@@ -73,5 +77,13 @@ public class AtuadorService {
     }
 
     atuadorRepository.delete(atuador);
+  }
+
+  public GetAtuadorDTO convertToGetAtuadorDTO(Atuador atuador) {
+    Long dispositivoId = (atuador.getDispositivo() != null) ? atuador.getDispositivo().getId() : null;
+
+    GetAtuadorDTO dto = new GetAtuadorDTO(
+        atuador.getId(), atuador.getNome(), dispositivoId);
+    return dto;
   }
 }

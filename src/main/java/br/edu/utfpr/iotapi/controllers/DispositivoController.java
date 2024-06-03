@@ -1,7 +1,9 @@
 package br.edu.utfpr.iotapi.controllers;
 
+import br.edu.utfpr.iotapi.dto.atuador.GetAtuadorDTO;
 import br.edu.utfpr.iotapi.dto.dispositivo.CreateDispositivoDTO;
 import br.edu.utfpr.iotapi.dto.dispositivo.GetDispositivoDTO;
+import br.edu.utfpr.iotapi.dto.sensor.GetSensorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Atuador;
 import br.edu.utfpr.iotapi.models.Dispositivo;
@@ -86,14 +88,14 @@ public class DispositivoController {
     }
 
     @GetMapping("/{id}/sensor")
-    public ResponseEntity<List<Sensor>> getSensorsByDispositivoId(@PathVariable("id") long id) {
-        List<Sensor> sensores = dispositivoService.getSensorsByDispositivoId(id);
+    public ResponseEntity<List<GetSensorDTO>> getSensorsByDispositivoId(@PathVariable("id") long id) {
+        List<GetSensorDTO> sensores = dispositivoService.getSensorsByDispositivoId(id);
         return ResponseEntity.ok(sensores);
     }
 
     @GetMapping("/{id}/atuador")
-    public ResponseEntity<List<Atuador>> getAtuadoresByDispositivoId(@PathVariable("id") long id) {
-        List<Atuador> atuadores = dispositivoService.getAtuadoresByDispositivoId(id);
+    public ResponseEntity<List<GetAtuadorDTO>> getAtuadoresByDispositivoId(@PathVariable("id") long id) {
+        List<GetAtuadorDTO> atuadores = dispositivoService.getAtuadoresByDispositivoId(id);
         return ResponseEntity.ok(atuadores);
     }
 }

@@ -35,8 +35,8 @@ public class AtuadorController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Atuador>> getAll() {
-    List<Atuador> atuadores = atuadorService.getAll();
+  public ResponseEntity<List<GetAtuadorDTO>> getAll() {
+    List<GetAtuadorDTO> atuadores = atuadorService.getAll();
     return ResponseEntity.ok(atuadores);
   }
 

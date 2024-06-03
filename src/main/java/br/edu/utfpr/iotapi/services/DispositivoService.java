@@ -1,18 +1,23 @@
 package br.edu.utfpr.iotapi.services;
 
+import br.edu.utfpr.iotapi.dto.atuador.GetAtuadorDTO;
 import br.edu.utfpr.iotapi.dto.dispositivo.CreateDispositivoDTO;
 import br.edu.utfpr.iotapi.dto.dispositivo.GetDispositivoDTO;
+import br.edu.utfpr.iotapi.dto.sensor.GetSensorDTO;
 import br.edu.utfpr.iotapi.exceptions.NotFoundException;
 import br.edu.utfpr.iotapi.models.Dispositivo;
 import br.edu.utfpr.iotapi.models.Sensor;
 import br.edu.utfpr.iotapi.models.Atuador;
 import br.edu.utfpr.iotapi.repository.DispositivoRepository;
 import br.edu.utfpr.iotapi.repository.SensorRepository;
+import jakarta.transaction.Transactional;
 import br.edu.utfpr.iotapi.repository.AtuadorRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +29,12 @@ public class DispositivoService {
 
     @Autowired
     private SensorRepository sensorRepository;
+
+    @Autowired
+    private SensorService sensorService;
+
+    @Autowired
+    private AtuadorService atuadorService;
 
     @Autowired
     private AtuadorRepository atuadorRepository;
@@ -58,12 +69,14 @@ public class DispositivoService {
         dispositivoRepository.deleteById(id);
     }
 
+    @Transactional
     public void addSensors(long id, List<Long> sensorIds) throws NotFoundException {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Dispositivo " + id + " não existe"));
         for (Long sensorId : sensorIds) {
             Sensor sensor = sensorRepository.findById(sensorId)
                     .orElseThrow(() -> new NotFoundException("Sensor " + sensorId + " não existe"));
+            sensor.setDispositivo(dispositivo);
             dispositivo.getSensores().add(sensor);
         }
         dispositivoRepository.save(dispositivo);
@@ -82,12 +95,14 @@ public class DispositivoService {
         dispositivoRepository.save(dispositivo);
     }
 
+    @Transactional
     public void addAtuadores(long id, List<Long> atuadorIds) throws NotFoundException {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Dispositivo " + id + " não existe"));
         for (Long atuadorId : atuadorIds) {
             Atuador atuador = atuadorRepository.findById(atuadorId)
                     .orElseThrow(() -> new NotFoundException("Atuador " + atuadorId + " não existe"));
+            atuador.setDispositivo(dispositivo);
             dispositivo.getAtuadores().add(atuador);
         }
         dispositivoRepository.save(dispositivo);
@@ -105,20 +120,24 @@ public class DispositivoService {
         dispositivoRepository.save(dispositivo);
     }
 
-    public List<Sensor> getSensorsByDispositivoId(long id) {
+    @Transactional
+    public List<GetSensorDTO> getSensorsByDispositivoId(long id) {
         Dispositivo dispositivo = dispositivoRepository.findById(id).orElse(null);
         if (dispositivo != null) {
-            return dispositivo.getSensores();
+            return dispositivo.getSensores().stream().map(sensor -> sensorService.convertToGetSensorDTO(sensor))
+                    .collect(Collectors.toList());
         }
-        return null;
+        return Collections.emptyList();
     }
 
-    public List<Atuador> getAtuadoresByDispositivoId(long id) {
+    @Transactional
+    public List<GetAtuadorDTO> getAtuadoresByDispositivoId(long id) {
         Dispositivo dispositivo = dispositivoRepository.findById(id).orElse(null);
         if (dispositivo != null) {
-            return dispositivo.getAtuadores();
+            return dispositivo.getAtuadores().stream().map(atuador -> atuadorService.convertToGetAtuadorDTO(atuador))
+                    .collect(Collectors.toList());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private GetDispositivoDTO convertToGetDispositivoDTO(Dispositivo dispositivo) {

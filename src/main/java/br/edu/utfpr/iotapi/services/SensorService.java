@@ -48,7 +48,7 @@ public class SensorService {
         sensorRepository.deleteById(id);
     }
 
-    private GetSensorDTO convertToGetSensorDTO(Sensor sensor) {
+    public GetSensorDTO convertToGetSensorDTO(Sensor sensor) {
         Long dispositivoId = (sensor.getDispositivo() != null) ? sensor.getDispositivo().getId() : null;
 
         GetSensorDTO dto = new GetSensorDTO(

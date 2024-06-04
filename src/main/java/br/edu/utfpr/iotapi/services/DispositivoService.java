@@ -10,11 +10,14 @@ import br.edu.utfpr.iotapi.models.Sensor;
 import br.edu.utfpr.iotapi.models.Atuador;
 import br.edu.utfpr.iotapi.repository.DispositivoRepository;
 import br.edu.utfpr.iotapi.repository.SensorRepository;
-import jakarta.transaction.Transactional;
+
 import br.edu.utfpr.iotapi.repository.AtuadorRepository;
+
+import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -73,15 +76,19 @@ public class DispositivoService {
     public void addSensors(long id, List<Long> sensorIds) throws NotFoundException {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Dispositivo " + id + " não existe"));
-        for (Long sensorId : sensorIds) {
-            Sensor sensor = sensorRepository.findById(sensorId)
-                    .orElseThrow(() -> new NotFoundException("Sensor " + sensorId + " não existe"));
-            sensor.setDispositivo(dispositivo);
-            dispositivo.getSensores().add(sensor);
+
+        List<Sensor> sensores = sensorRepository.findAllById(sensorIds);
+
+        for (Sensor sensor : sensores) {
+            if (sensor.getDispositivo() == null) {
+                sensor.setDispositivo(dispositivo);
+            }
         }
+        dispositivo.setSensores(sensores);
         dispositivoRepository.save(dispositivo);
     }
 
+    @Transactional
     public void removeSensors(long id, List<Long> sensorIds) throws NotFoundException {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Dispositivo " + id + " não existe"));
@@ -91,7 +98,6 @@ public class DispositivoService {
             dispositivo.getSensores().remove(sensor);
             sensorRepository.delete(sensor);
         }
-
         dispositivoRepository.save(dispositivo);
     }
 
@@ -108,6 +114,7 @@ public class DispositivoService {
         dispositivoRepository.save(dispositivo);
     }
 
+    @Transactional
     public void removeAtuadores(long id, List<Long> atuadorIds) throws NotFoundException {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Dispositivo " + id + " não existe"));

@@ -2,6 +2,7 @@ package br.edu.utfpr.iotapi.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,12 +47,12 @@ public class Dispositivo {
   private Gateway gateway;
 
   @Column(nullable = false)
-  @OneToMany(mappedBy = "dispositivo")
+  @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Sensor> sensores;
 
   @Column(nullable = false)
-  @OneToMany(mappedBy = "dispositivo")
+  @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Atuador> atuadores;
 }

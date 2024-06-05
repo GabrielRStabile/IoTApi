@@ -26,7 +26,7 @@ public class AutenticacaoController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<String> autenticar(@Valid @RequestBody LoginDTO loginDTO) throws UsernameNotFoundException {
         var usernamePassword = new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.senha());
         var auth = authenticationManager.authenticate(usernamePassword);
@@ -36,7 +36,7 @@ public class AutenticacaoController {
         return ResponseEntity.ok().body(token);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity registrar(@Valid @RequestBody CreatePessoaDTO createPessoaDTO) throws EmailAlreadyRegistered {
         autenticacaoService.registrar(createPessoaDTO);
         return ResponseEntity.ok().build();

@@ -82,6 +82,7 @@ public class DispositivoService {
         for (Sensor sensor : sensores) {
             if (sensor.getDispositivo() == null) {
                 sensor.setDispositivo(dispositivo);
+                sensorService.addDispositivo(sensor.getId(), dispositivo.getId());
             }
         }
         dispositivo.setSensores(sensores);
@@ -96,7 +97,8 @@ public class DispositivoService {
             Sensor sensor = sensorRepository.findById(sensorId)
                     .orElseThrow(() -> new NotFoundException("Sensor " + sensorId + " não existe"));
             dispositivo.getSensores().remove(sensor);
-            sensorRepository.delete(sensor);
+
+            sensorService.removeDispositivo(sensorId);
         }
         dispositivoRepository.save(dispositivo);
     }
@@ -122,7 +124,6 @@ public class DispositivoService {
             Atuador atuador = atuadorRepository.findById(atuadorId)
                     .orElseThrow(() -> new NotFoundException("Atuador " + atuadorId + " não existe"));
             dispositivo.getAtuadores().remove(atuador);
-            atuadorRepository.delete(atuador);
         }
         dispositivoRepository.save(dispositivo);
     }

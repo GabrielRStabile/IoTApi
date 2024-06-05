@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public final class GetPessoaDTO {
+    private long id;
     private String nome;
     private String email;
     private FuncaoPessoa funcao;

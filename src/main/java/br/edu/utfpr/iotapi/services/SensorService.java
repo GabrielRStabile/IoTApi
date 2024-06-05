@@ -40,7 +40,22 @@ public class SensorService {
         return sensorRepository.save(sensor);
     }
 
-    // TODO: Remover o vinculo com dispositivo
+    public void removeDispositivo(long id) throws NotFoundException {
+        Sensor sensor = sensorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Sensor " + id + " não existe"));
+        sensor.setDispositivo(null);
+        sensorRepository.save(sensor);
+    }
+
+    public void addDispositivo(long id, long dispositivoId) throws NotFoundException {
+        Sensor sensor = sensorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Sensor " + id + " não existe"));
+        Dispositivo dispositivo = new Dispositivo();
+        dispositivo.setId(dispositivoId);
+        sensor.setDispositivo(dispositivo);
+        sensorRepository.save(sensor);
+    }
+
     public void delete(long id) throws NotFoundException {
         if (!sensorRepository.existsById(id)) {
             throw new NotFoundException("Sensor " + id + " não existe");

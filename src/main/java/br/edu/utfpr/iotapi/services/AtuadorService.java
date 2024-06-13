@@ -69,12 +69,12 @@ public class AtuadorService {
       throw new NotFoundException("Atuador " + id + " não existe");
     }
     var atuador = res.get();
-
-    var dispositivo = atuador.getDispositivo();
-    if (dispositivo != null) {
-      dispositivo.getAtuadores().remove(atuador);
-      dispositivoRepository.save(dispositivo);
-    }
+    atuador.setDispositivo(null);
+    // var dispositivo = atuador.getDispositivo();
+    // if (dispositivo != null) {
+    // dispositivo.getAtuadores().remove(atuador);
+    // dispositivoRepository.save(dispositivo);
+    // }
 
     atuadorRepository.delete(atuador);
   }

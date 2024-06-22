@@ -1,0 +1,58 @@
+name: 🚀 Deploy (Production)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔽 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 📦 Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: 🚀 Build with Gradle
+        run: gradle clean build -x test
+
+      - name: 🐳 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}      
+
+      - name: 🛜 Build and push Docker image
+        uses: docker/build-push-action@v6.1.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/iot-spring-api:${{ github.sha }}
+
+  deploy-to-azure:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔐 Login to Azure
+        uses: Azure/login@v2.1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 🚢 Deploy to Azure Container Instances
+        uses: Azure/aci-deploy@v1.1.3
+        with:
+          resource-group: DefaultResourceGroup-CQ
+          name: iot-spring-api
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/iot-spring-api:${{ github.sha }}
+          registry-login-server: docker.io
+          registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          location: "south america"
+          ip-address: "public"
+          ports: 8080
+          dns-name-label: iot-spring-api

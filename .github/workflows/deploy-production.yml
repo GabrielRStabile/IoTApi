@@ -17,9 +17,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: 🚀 Build with Gradle
-        run: gradle clean build -x test
-
       - name: 🐳 Login GitHub Container Registry
         uses: docker/login-action@v3
         with:
